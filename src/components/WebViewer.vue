@@ -23,18 +23,38 @@ export default {
             instance.Core;
 
           documentViewer.addEventListener('documentLoaded', () => {
-            const rectangleAnnot = new Annotations.RectangleAnnotation({
-              PageNumber: 1,
-              // values are in page coordinates with (0, 0) in the top left
-              X: 100,
-              Y: 150,
-              Width: 200,
-              Height: 50,
-              Author: annotationManager.getCurrentUser(),
-            });
-            annotationManager.addAnnotation(rectangleAnnot);
-            annotationManager.redrawAnnotation(rectangleAnnot);
+            const field = new Annotations.Forms.Field(
+              `test_sig`,
+              {
+                type: "Sig",
+              }
+            );
+
+            const signatureAnnot =
+              new Annotations.SignatureWidgetAnnotation(
+                field
+              );
+
+            signatureAnnot.PageNumber = 1;
+            signatureAnnot.X = 100;
+            signatureAnnot.Y = 150;
+            signatureAnnot.Width = 200;
+            signatureAnnot.Height = 50;
+
+            annotationManager.addAnnotation(signatureAnnot);
+            annotationManager.redrawAnnotation(signatureAnnot);
           });
+
+          annotationManager.addEventListener(
+            "annotationChanged",
+            (annotation, action) => {
+              console.log(
+                "annotationManager annotationChanged",
+                annotation,
+                action
+              );
+            }
+          );
         }
       );
     });
